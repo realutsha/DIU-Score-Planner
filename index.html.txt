@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIU Grade Planner | Dark Mode</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark-1: #0a1118;
+            --bg-dark-2: #0d1b2a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.25);
+            --btn-grad-1: #005b8f;
+            --btn-grad-2: #00b4d8;
+            --text-main: #ffffff;
+            --text-muted: #8892b0;
+            --neon-glow: rgba(0, 180, 216, 0.4);
+            --neon-orange-glow: rgba(255, 65, 108, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% -20%, rgba(0, 180, 216, 0.15), transparent 50%),
+                        linear-gradient(135deg, var(--bg-dark-1), var(--bg-dark-2));
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        /* MAIN GLASSMORPHISM CARD */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1000px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 15px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .logo-area i {
+            color: var(--btn-grad-2);
+            font-size: 24px;
+        }
+
+        .creator-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* 60/40 LAYOUT */
+        .layout-grid {
+            display: flex;
+            gap: 50px;
+        }
+
+        .left-col {
+            flex: 6;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .right-col {
+            flex: 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* INPUT FIELDS (Material Outlined) */
+        .quiz-section-title {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: -10px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .quiz-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: 0.3s ease;
+            z-index: 2;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 16px 16px 16px 45px;
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Remove arrows */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            background: transparent;
+            z-index: 1;
+        }
+
+        .input-group input:focus,
+        .input-group input:not(:placeholder-shown) {
+            border-color: var(--btn-grad-2);
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.1);
+            border-width: 2px;
+            padding-left: 44px;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: 0;
+            left: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--btn-grad-2);
+            background: #0b1520; 
+            padding: 0 6px;
+            border-radius: 4px;
+        }
+
+        .input-group input:focus ~ i {
+            color: var(--btn-grad-2);
+        }
+
+        /* BUTTON */
+        button {
+            width: 100%;
+            padding: 18px;
+            margin-top: 15px;
+            background: linear-gradient(90deg, var(--btn-grad-1), var(--btn-grad-2));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--neon-glow);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(0, 180, 216, 0.6);
+            background: linear-gradient(90deg, #006b9f, #00c4e8);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* RESULT VISUALIZATION (SVG Ring) */
+        .ring-container {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 0 12px var(--neon-orange-glow));
+        }
+
+        .progress-ring__track {
+            stroke: rgba(255, 255, 255, 0.05);
+            fill: transparent;
+            stroke-width: 14;
+        }
+
+        .progress-ring__fill {
+            stroke: url(#neonGradient);
+            fill: transparent;
+            stroke-width: 14;
+            stroke-linecap: round;
+            stroke-dasharray: 628;
+            stroke-dashoffset: 628;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ring-text {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .ring-text .score {
+            font-size: 52px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .ring-text .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        /* GLASSMORPHIC ALERT BOX */
+        .alert-box {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .alert-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .alert-box strong {
+            color: #ff416c;
+            font-weight: 600;
+        }
+
+        .alert-success strong {
+            color: #00b4d8;
+        }
+
+        /* New Danger Alert Style for Invalid Inputs */
+        .alert-danger {
+            background: rgba(255, 65, 108, 0.1);
+            border-color: rgba(255, 65, 108, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .layout-grid { flex-direction: column; gap: 40px; }
+            .left-col, .right-col { flex: 1; width: 100%; }
+            .glass-card { padding: 30px 20px; }
+            .quiz-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-card">
+    <header>
+        <div class="logo-area">
+            <i class="fa-solid fa-shield-halved"></i>
+            DIU GRADE PLANNER
+        </div>
+        <div class="creator-text">Created by: Creator Utsha</div>
+    </header>
+
+    <div class="layout-grid">
+        <div class="left-col">
+            
+            <div class="quiz-section-title">Quizzes (Out of 15 each)</div>
+            <div class="quiz-row">
+                <div class="input-group">
+                    <i class="fa-solid fa-pen"></i>
+                    <input type="number" id="q1" placeholder=" " min="0" max="15">
+                    <label>Quiz 1</label>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-pen"></i>
+                    <input type="number" id="q2" placeholder=" " min="0" max="15">
+                    <label>Quiz 2</label>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-pen"></i>
+                    <input type="number" id="q3" placeholder=" " min="0" max="15">
+                    <label>Quiz 3</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-file-alt"></i>
+                <input type="number" id="mid" placeholder=" " min="0" max="25">
+                <label>Midterm (Out of 25)</label>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-user-check"></i>
+                <input type="number" id="att" placeholder=" " min="0" max="7">
+                <label>Attendance (Out of 7)</label>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-person-chalkboard"></i>
+                <input type="number" id="pres" placeholder=" " min="0" max="8">
+                <label>Presentation (Out of 8)</label>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-laptop-code"></i>
+                <input type="number" id="assign" placeholder=" " min="0" max="5">
+                <label>Assignment (Out of 5)</label>
+            </div>
+
+            <button onclick="calculateTarget()">CALCULATE & SUGGEST</button>
+        </div>
+
+        <div class="right-col">
+            <div class="ring-container">
+                <svg class="progress-ring" width="240" height="240">
+                    <defs>
+                        <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff4b2b" />
+                            <stop offset="100%" stop-color="#ff416c" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring__track" r="100" cx="120" cy="120"></circle>
+                    <circle class="progress-ring__fill" id="progressRing" r="100" cx="120" cy="120"></circle>
+                </svg>
+                <div class="ring-text">
+                    <div class="score" id="scoreDisplay">0</div>
+                    <div class="label">Current Total Marks</div>
+                </div>
+            </div>
+
+            <div id="alertBox" class="alert-box">
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = (progress * (end - start) + start).toFixed(2).replace(/\.00$/, '');
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    function calculateTarget() {
+        // 1. Fetch Values
+        let q1 = parseFloat(document.getElementById('q1').value);
+        let q2 = parseFloat(document.getElementById('q2').value);
+        let q3 = parseFloat(document.getElementById('q3').value);
+        let mid = parseFloat(document.getElementById('mid').value);
+        let att = parseFloat(document.getElementById('att').value);
+        let pres = parseFloat(document.getElementById('pres').value);
+        let assign = parseFloat(document.getElementById('assign').value);
+
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const progressRing = document.getElementById('progressRing');
+        const alertBox = document.getElementById('alertBox');
+        
+        // Reset UI states
+        alertBox.classList.remove('show', 'alert-success', 'alert-danger');
+
+        // ==========================================
+        // NEW: STRICT INPUT VALIDATION
+        // ==========================================
+        let errors = [];
+        
+        if (q1 > 15 || q2 > 15 || q3 > 15) errors.push("Quiz marks cannot exceed 15.");
+        if (q1 < 0 || q2 < 0 || q3 < 0) errors.push("Quiz marks cannot be negative.");
+        
+        if (mid > 25) errors.push("Midterm marks cannot exceed 25.");
+        if (mid < 0) errors.push("Midterm marks cannot be negative.");
+        
+        if (att > 7) errors.push("Attendance cannot exceed 7.");
+        if (att < 0) errors.push("Attendance cannot be negative.");
+        
+        if (pres > 8) errors.push("Presentation cannot exceed 8.");
+        if (pres < 0) errors.push("Presentation cannot be negative.");
+        
+        if (assign > 5) errors.push("Assignment cannot exceed 5.");
+        if (assign < 0) errors.push("Assignment cannot be negative.");
+
+        // If any errors exist, show them and STOP the calculation
+        if (errors.length > 0) {
+            scoreDisplay.innerHTML = "Err";
+            progressRing.style.strokeDashoffset = 628; // Empty the ring
+            
+            alertBox.innerHTML = `⚠️ <strong>Invalid Input Detected:</strong><br><br>${errors.join('<br>')}`;
+            alertBox.classList.add('alert-danger');
+            
+            setTimeout(() => alertBox.classList.add('show'), 100);
+            return; // Halt function execution
+        }
+        // ==========================================
+
+        // Normalize NaNs to 0 for valid empty fields
+        mid = mid || 0;
+        att = att || 0;
+        pres = pres || 0;
+        assign = assign || 0;
+
+        let quizzesTaken = 0;
+        let quizSum = 0;
+
+        if(!isNaN(q1)) { quizzesTaken++; quizSum += q1; }
+        if(!isNaN(q2)) { quizzesTaken++; quizSum += q2; }
+        if(!isNaN(q3)) { quizzesTaken++; quizSum += q3; }
+
+        let quizAverage = quizzesTaken > 0 ? quizSum / 3 : 0;
+        
+        let currentTotal = mid + quizAverage + att + pres + assign;
+        let neededMarks = 80 - currentTotal;
+
+        // Animate Number & SVG Ring
+        animateValue(scoreDisplay, 0, currentTotal, 1200);
+
+        const radius = progressRing.r.baseVal.value; 
+        const circumference = radius * 2 * Math.PI;  
+        progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+        
+        let visualTotal = currentTotal > 80 ? 80 : currentTotal;
+        const offset = circumference - (visualTotal / 80) * circumference;
+        
+        setTimeout(() => {
+            progressRing.style.strokeDashoffset = offset;
+        }, 50);
+
+        // Generate Final Suggestion Box Text
+        let alertHTML = '';
+        
+        if (currentTotal === 0 && quizzesTaken === 0) {
+            alertHTML = `Enter your current scores on the left, and hit <strong>Calculate</strong> to map out your path to an 80+ grade.`;
+        } 
+        else if (neededMarks <= 0) {
+            alertBox.classList.add('alert-success');
+            alertHTML = `🎉 Excellent work! You have already surpassed the 80 mark threshold. You need <strong>0</strong> more marks.`;
+        } 
+        else {
+            if (neededMarks <= 40) {
+                alertHTML = `You need <strong>${neededMarks.toFixed(2)}</strong> more marks to hit 80.<br><br>Target <strong>${neededMarks.toFixed(2)} out of 40</strong> on the Final Exam.`;
+            } else {
+                alertHTML = `You need <strong>${neededMarks.toFixed(2)}</strong> more marks to hit 80.<br><br>⚠️ <strong>Warning:</strong> A maximum of 40 marks are available on the Final Exam. You must secure missing assignment or quiz marks to reach your goal.`;
+            }
+
+            if (quizzesTaken > 0 && quizzesTaken < 3) {
+                let potentialBoost = 15 / 3; 
+                let newNeededFinal = neededMarks - potentialBoost;
+                if (newNeededFinal <= 40) {
+                    alertHTML += `<br><br>💡 <em>Tip: Score 15/15 on your next quiz to drop your final exam requirement to <strong>${newNeededFinal.toFixed(2)}</strong>.</em>`;
+                }
+            }
+        }
+
+        alertBox.innerHTML = alertHTML;
+        setTimeout(() => alertBox.classList.add('show'), 400);
+    }
+</script>
+
+</body>
+</html>
